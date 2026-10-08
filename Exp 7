@@ -1,0 +1,49 @@
+%{
+#include <stdio.h>
+%}
+
+%%
+
+.*COM$  { printf("Line ends with COM: %s\n", yytext); }
+.*      { printf("Line does not end with COM: %s\n", yytext); }
+
+%%
+
+int main()
+{
+    yylex();
+    return 0;
+}
+
+int yywrap()
+{
+    return 1;
+}
+
+
+
+Terminal Session
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ vim com_1239.l
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ lex com_1239.l
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ cc lex.yy.c -ll
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ ./a.out
+sitnagpur.COM
+Line ends with COM: sitnagpur.COM
+
+google.COM
+Line ends with COM: google.COM
+
+HELLOCOM
+ABC COM
+WELCOME
+COM
+TESTCOM
+Line ends with COM: HELLOCOM
+
+Line ends with COM: ABC COM
+
+Line does not end with COM: WELCOME
+
+Line ends with COM: COM
+
+Line ends with COM: TESTCOM
