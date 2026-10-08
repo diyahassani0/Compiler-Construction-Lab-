@@ -1,0 +1,59 @@
+%{
+#include <stdio.h>
+
+int count = 0;
+%}
+
+%%
+
+[Aa][a-zA-Z]* { count++; }
+\n ;
+. ;
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+
+int main()
+{
+    yylex();
+
+    printf("Number of words starting with A/a = %d\n", count);
+
+    return 0;
+}
+
+
+
+#include<stdio.h>
+
+// Single line comment
+
+int main()
+{
+    int a = 10;
+    float b = 20;
+
+    if(a < b)
+    {
+        printf("Hello");
+    }
+
+    return 0;
+}
+
+/* Multi-line
+   comment */
+
+
+
+Terminal Session
+
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ vim countexp3_1239.l
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ lex countexp3_1239.l
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ cc lex.yy.c -ll
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ ./a.out < input.c
+Number of words starting with A/a = 4
