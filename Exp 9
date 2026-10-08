@@ -1,0 +1,78 @@
+%{
+#include "y.tab.h"
+#include <stdlib.h>
+%}
+
+%%
+
+[0-9]+      { yylval = atoi(yytext); return NUMBER; }
+[+\-*/\n()] { return yytext[0]; }
+.           { return yytext[0]; }
+
+%%
+
+int yywrap() {
+    return 1;
+}
+
+
+%{
+#include <stdio.h>
+#include <stdlib.h>
+int yylex();
+int yyerror(char *s);
+%}
+
+%token NUMBER
+%left '+' '-'
+%left '*' '/'
+
+%%
+
+input : /* empty */
+      | input line
+      ;
+
+line  : expr '\n'    { printf("Result = %d\n", $1); }
+      | error '\n'   { printf("Syntax Error! Please re-enter.\n"); yyerrok; }
+      ;
+
+expr  : expr '+' expr { $$ = $1 + $3; }
+      | expr '-' expr { $$ = $1 - $3; }
+      | expr '*' expr { $$ = $1 * $3; }
+      | expr '/' expr { if ($3 == 0) { printf("Error: Division by zero!\n"); $$ = 0; } else $$ = $1 / $3; }
+      | '(' expr ')'  { $$ = $2; }
+      | NUMBER
+      ;
+
+%%
+
+int main() {
+    printf("Desk Calculator: Enter expressions\n");
+    yyparse();
+    return 0;
+}
+
+int yyerror(char *s) {
+    return 0; // Error message already printed in grammar
+}
+
+
+
+
+Terminal Session
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ gedit cal_1239.l
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ gedit cal_1239.y
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ yacc -d cal_1239.y
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ lex cal_1239.l
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ gcc lex.yy.c y.tab.c -lfl
+lab-03-17@lab-03-17-OptiPlex-3280-AIO:~$ ./a.out
+Desk Calculator: Enter expressions
+2+3
+Result = 5
+3-3
+Result = 0
+3*3
+Result = 9
+4/4
+Result = 1
