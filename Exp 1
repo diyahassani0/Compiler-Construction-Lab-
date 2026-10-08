@@ -1,0 +1,49 @@
+/*
+ * NOTE: top of file (%{ ... %}) was cropped in the original screenshot,
+ * only the closing "%}" was visible. Add includes here if needed, e.g:
+ * %{
+ * #include <stdio.h>
+ * %}
+ */
+
+%%
+ONE|one|One   { printf("1"); }
+TWO|two|Two   { printf("2"); }
+THREE|three|Three { printf("3"); }
+FOUR|four|Four { printf("4"); }
+FIVE|five|Five { printf("5"); }
+SIX|six|Six   { printf("6"); }
+SEVEN|seven|Seven { printf("7"); }
+EIGHT|eight|Eight { printf("8"); }
+NINE|nine|Nine { printf("9"); }
+%%
+
+void main()
+{
+    yylex();
+}
+
+TERMINAL SESSION
+
+lab-03-30@lab-03-30-OptiPlex-3280-AIO:~$ vim number_1239.l
+lab-03-30@lab-03-30-OptiPlex-3280-AIO:~$ lex number_1239.l
+lab-03-30@lab-03-30-OptiPlex-3280-AIO:~$ cc lex.yy.c -ll
+lab-03-30@lab-03-30-OptiPlex-3280-AIO:~$ ./a.out
+one
+1
+Three
+3
+Eight
+8
+two
+2
+Seven
+7
+four
+4
+FIVE
+5
+Six
+6
+NINE
+9
